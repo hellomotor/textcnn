@@ -92,11 +92,14 @@ def model_fn_builder(document_max_len,
 
 
 def input_fn_builder(FLAGS, split, document_max_len, shuffle_and_repeat=False):
-    label_index, phrase_index = 1, 3
+    label_index, phrase_index = 1, 4
 
     def parse_fn(phrase, label):
         tokens = [ch.encode('utf8') for ch in phrase]
-        tokens.extend(['[PAD]'] * (document_max_len - len(tokens)))
+        if len(tokens) > document_max_len:
+            tokens = tokens[:document_max_len]
+        else:
+            tokens.extend(['[PAD]'] * (document_max_len - len(tokens)))
         return tokens, label
 
     def generator_fn(path):

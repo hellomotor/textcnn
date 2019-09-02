@@ -1,5 +1,5 @@
 import json
-
+import os
 import tensorflow as tf
 from absl import flags, app
 from pathlib import Path
@@ -47,6 +47,8 @@ def main(_):
         "num_epochs": 10,
         "batch_size": 128
     }
+    if not os.path.exists(FLAGS.output_dir):
+        os.mkdir(FLAGS.output_dir)
     with Path(FLAGS.output_dir, 'params.json').open('w', encoding="utf8") as f:
         f.write(json.dumps(params, ensure_ascii=False).decode('utf8'))
     model_fn = model_fn_builder(
